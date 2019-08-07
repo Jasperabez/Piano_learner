@@ -13,10 +13,11 @@ notes = []
 noteBeat = list()
 pinTime = list()
 min_beat = 10
-switch_state;
+switch_state = 0;
 print("hihi")
-
-GPIO.setmode(GPIO.BOARD)
+whiteNoteList = [1,3,5,6,8,10,12]
+blackNoteList = [2,4,7,9,11]
+GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 #pin of start/pause/resume button
 GPIO.setup(25,GPIO.IN)
@@ -25,8 +26,10 @@ GPIO.setup(25,GPIO.IN)
 pixel_pin = board.D18
 pixel_black_pin = board.D10
 # The number of NeoPixels
-num_pixels = 12
-
+num_pixels = 7
+num_pixels_black = 5
+whiteNotePins = list(range(num_pixels))
+blackNotePins = list(range(num_pixels_black))
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
@@ -41,7 +44,11 @@ def remap(OldValue,OldMin,OldMax,NewMin,NewMax):
     return NewValue
 
 def remapNote(note):
-    NewValue = (((note - 60) * (11 - 0)) / (71 - 60)) + 0
+    note_num = (note%12)-1
+    if note_num in whiteNoteList:
+        NewValue = whiteNotePins[whiteNoteList.index(note_num)]
+    else:
+        NewValue = blackNotePins[blackNoteList.index(note_num)]
     return NewValue
 
 def roundBeat(input_beat):
@@ -50,9 +57,6 @@ def roundBeat(input_beat):
         beat_types[k] = abs(beat_types[k]-input_beat)
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
-
-def readTempo():
-
 
 def writeToPin(sequence, temp):
     pixels.fill((0,0,0))
