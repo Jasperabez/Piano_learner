@@ -97,6 +97,8 @@ for note_meta in noteBeat:
         pinTime.append(notedict)
 
 while True:
-      for sequence in pinTime:
-          print(sequence)
-          writeToPin(sequence, Tempo)
+    for sequence in pinTime:
+      print(sequence)
+      writeToPin(sequence, Tempo)
+    pixels.fill((0,0,0))
+    time.sleep(5)
