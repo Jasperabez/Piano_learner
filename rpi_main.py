@@ -24,19 +24,18 @@ GPIO.setup(25,GPIO.IN)
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
 pixel_pin = board.D18
-pixel_black_pin = board.D10
 # The number of NeoPixels
 num_pixels = 7
 num_pixels_black = 5
 whiteNotePins = list(range(num_pixels))
 blackNotePins = list(range(num_pixels_black))
+for value in blackNotePins:
+    value += 7
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
 
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
-                           pixel_order=ORDER)
-pixels_black = neopixel.NeoPixel(pixel_black_pin, num_pixels, brightness=0.2, auto_write=False,
                            pixel_order=ORDER)
 
 def remap(OldValue,OldMin,OldMax,NewMin,NewMax):
@@ -60,20 +59,13 @@ def roundBeat(input_beat):
 
 def writeToPin(sequence, temp):
     pixels.fill((0,0,0))
-    pixels_black.fill((0,0,0))
-    pixels_black.show()
     pixels.show()
     for note,state in sequence.items():
         if state ==0:
-            pixels_black[remapNote(note)] = (0, 0, 0)
             pixels[remapNote(note)] = (0, 0, 0)
         else:
-            if note in black_notes:
-                pixels_black[remapNote(note)] = (255, 0, 0)
-            else:
-                pixels[remapNote(note)] = (255, 0, 0)
+            pixels[remapNote(note)] = (255, 0, 0)
         pixels.show()
-        pixel_black_pin.show()
     time.sleep(temp / (10 ** 6))
 
 def waitForButtonPress():
