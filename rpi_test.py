@@ -43,7 +43,7 @@ def remap(OldValue,OldMin,OldMax,NewMin,NewMax):
     return NewValue
 
 def remapNote(note):
-    note_num = (note%12)-1
+    note_num = (note%12)+1
     if note_num in whiteNoteList:
         NewValue = whiteNotePins[whiteNoteList.index(note_num)]
     else:
