@@ -10,6 +10,7 @@ mid = mido.MidiFile("me.mid")
 Tempo = 0
 black_notes = [61,63,66,68,70]
 notes = []
+clear = 0
 noteBeat = list()
 pinTime = list()
 min_beat = 10
@@ -57,16 +58,13 @@ def roundBeat(input_beat):
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
 
-def writeToPin(sequence, temp):
-    clear = 0
+def writeToPin(sequence, temp,clear):
     pixels.fill((0, 0, 0))
     pixels.show()
+    if clear == 1:
+        time.sleep(0.1)
+        clear = 0
     for note,states in sequence.items():
-        if clear == 1:
-            pixels.fill((0, 0, 0))
-            pixels.show()
-            time.sleep(0.1)
-            clear = 0
         if states[0] == 0:
             pixels[remapNote(note)] = (0, 0, 0)
         else:
@@ -111,6 +109,6 @@ for note_meta in noteBeat:
 
 input("startseq")
 for sequence in pinTime:
-  writeToPin(sequence, Tempo)
+  writeToPin(sequence, Tempo,clear)
   print(sequence)
 print("end of sequence")
