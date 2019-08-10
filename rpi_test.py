@@ -64,6 +64,7 @@ def writeToPin(sequence, temp):
             pixels.fill((0, 0, 0))
             pixels.show()
             time.sleep(0.1)
+            clear = 0
         if states[0] == 0:
             pixels[remapNote(note)] = (0, 0, 0)
         else:
