@@ -67,7 +67,7 @@ def writeToPin(sequence, temp):
             if states[1] == 0:
                 pixels.fill((0, 0, 0))
                 pixels.show()
-                time.sleep(0.2)
+                time.sleep(0.1)
             pixels[remapNote(note)] = (255, 0, 0)
         pixels.show()
     time.sleep(temp / (10 ** 6))
@@ -98,6 +98,7 @@ for note_meta in noteBeat:
     notedict = dict()
     for i in range(int(note_meta["beat"]/min_beat)):
         if not i+1 == int(note_meta["beat"]/min_beat):
+            print("forbidden seq")
             notedict[note_meta["note"]] = (note_meta["state"], 1)
         else:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
