@@ -60,10 +60,14 @@ def roundBeat(input_beat):
 def writeToPin(sequence, temp):
     pixels.fill((0,0,0))
     pixels.show()
-    for note,state in sequence.items():
-        if state ==0:
+    for note,states in sequence.items():
+        if states[0] == 0:
             pixels[remapNote(note)] = (0, 0, 0)
         else:
+            if states[1] == 0:
+                pixels.fill((0, 0, 0))
+                pixels.show()
+                time.sleep(0.2)
             pixels[remapNote(note)] = (255, 0, 0)
         pixels.show()
     time.sleep(temp / (10 ** 6))
@@ -94,7 +98,10 @@ for note_meta in noteBeat:
     notedict = dict()
     notedict[note_meta["note"]] = note_meta["state"]
     for i in range(int(note_meta["beat"]/min_beat)):
-        pinTime.append(notedict)
+        if int(note_meta["beat"]/min_beat) > 1 and not i+1 == int(note_meta["beat"]/min_beat):
+            pinTime.append((notedict, 1))
+        else:
+            pinTime.append((notedict, 0))
 
 
 input("startseq")
