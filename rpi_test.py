@@ -97,7 +97,7 @@ for note_meta in noteBeat:
 for note_meta in noteBeat:
     notedict = dict()
     for i in range(int(note_meta["beat"]/min_beat)):
-        if int(note_meta["beat"]/min_beat) > 1 and not i+1 == int(note_meta["beat"]/min_beat):
+        if not i+1 == int(note_meta["beat"]/min_beat):
             notedict[note_meta["note"]] = (note_meta["state"], 1)
         else:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
