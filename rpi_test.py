@@ -64,12 +64,12 @@ def writeToPin(sequence, temp):
         if states[0] == 0:
             pixels[remapNote(note)] = (0, 0, 0)
         else:
-            if states[1] == 0:
-                pixels.fill((0, 0, 0))
-                pixels.show()
-                time.sleep(0.1)
             pixels[remapNote(note)] = (255, 0, 0)
         pixels.show()
+        if states[1] == 0:
+            pixels.fill((0, 0, 0))
+            pixels.show()
+            time.sleep(0.1)
     time.sleep(temp / (10 ** 6))
 
 def waitForButtonPress():
