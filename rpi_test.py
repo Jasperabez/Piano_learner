@@ -58,18 +58,19 @@ def roundBeat(input_beat):
     return float(nearest_beat)
 
 def writeToPin(sequence, temp):
-    pixels.fill((0,0,0))
-    pixels.show()
+    clear = 0
     for note,states in sequence.items():
-        if states[0] == 0:
-            pixels[remapNote(note)] = (0, 0, 0)
-        else:
-            pixels[remapNote(note)] = (255, 0, 0)
-        pixels.show()
-        if states[1] == 0:
+        if clear == 1:
             pixels.fill((0, 0, 0))
             pixels.show()
             time.sleep(0.1)
+        if states[0] == 0:
+            pixels[remapNote(note)] = (0, 0, 0)
+        else:
+            if states[1] == 0:
+                clear = 1
+            pixels[remapNote(note)] = (255, 0, 0)
+        pixels.show()
     time.sleep(temp / (10 ** 6))
 
 def waitForButtonPress():
