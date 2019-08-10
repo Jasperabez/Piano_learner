@@ -73,6 +73,7 @@ def writeToPin(sequence, temp,clear):
             pixels[remapNote(note)] = (255, 0, 0)
         pixels.show()
     time.sleep(temp / (10 ** 6))
+    return clear
 
 def waitForButtonPress():
     while not GPIO.input(25):
@@ -109,6 +110,6 @@ for note_meta in noteBeat:
 
 input("startseq")
 for sequence in pinTime:
-  writeToPin(sequence, Tempo,clear)
+  clear = writeToPin(sequence, Tempo,clear)
   print(sequence)
 print("end of sequence")
