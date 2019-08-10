@@ -59,6 +59,8 @@ def roundBeat(input_beat):
 
 def writeToPin(sequence, temp):
     clear = 0
+    pixels.fill((0, 0, 0))
+    pixels.show()
     for note,states in sequence.items():
         if clear == 1:
             pixels.fill((0, 0, 0))
