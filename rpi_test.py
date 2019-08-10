@@ -96,12 +96,12 @@ for note_meta in noteBeat:
 
 for note_meta in noteBeat:
     notedict = dict()
-    notedict[note_meta["note"]] = note_meta["state"]
     for i in range(int(note_meta["beat"]/min_beat)):
         if int(note_meta["beat"]/min_beat) > 1 and not i+1 == int(note_meta["beat"]/min_beat):
-            pinTime.append((notedict, 1))
+            notedict[note_meta["note"]] = (note_meta["state"], 1)
         else:
-            pinTime.append((notedict, 0))
+            notedict[note_meta["note"]] = (note_meta["state"], 0)
+        pinTime.append(notedict)
 
 
 input("startseq")
