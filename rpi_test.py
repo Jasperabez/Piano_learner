@@ -100,4 +100,5 @@ for note_meta in noteBeat:
 input("startseq")
 for sequence in pinTime:
   writeToPin(sequence, Tempo)
+  print(sequence)
 print("end of sequence")
