@@ -100,9 +100,10 @@ for note_meta in noteBeat:
         if not i+1 == int(note_meta["beat"]/min_beat):
             print("forbidden seq")
             notedict[note_meta["note"]] = (note_meta["state"], 1)
+            pinTime.append(notedict)
         else:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
-        pinTime.append(notedict)
+            pinTime.append(notedict)
 
 
 input("startseq")
