@@ -96,8 +96,8 @@ for note_meta in noteBeat:
     for i in range(int(note_meta["beat"]/min_beat)):
         pinTime.append(notedict)
 
-while True:
-    for sequence in pinTime:
-      writeToPin(sequence, Tempo)
-    pixels.fill((0,0,0))
-    time.sleep(5)
+
+input("startseq")
+for sequence in pinTime:
+  writeToPin(sequence, Tempo)
+print("end of sequence")
