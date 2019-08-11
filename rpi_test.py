@@ -59,21 +59,18 @@ def roundBeat(input_beat):
     return float(nearest_beat)
 
 def writeToPin(sequence, temp,clear):
-    pixels.fill((0, 0, 0))
+    t = 0
+    pixels.fill((0,0,0))
     pixels.show()
-    if clear == 1:
+    while t < (temp / (10 ** 6)):
+        for note, states in sequence.items():
+            if states[0] == 0 or (states == 0 and (t+0.1) >= (temp / (10 ** 6))):
+                pixels[remapNote(note)] = (0, 0, 0)
+            else:
+                pixels[remapNote(note)] = (255, 0, 0)
+            pixels.show()
         time.sleep(0.1)
-        clear = 0
-    for note,states in sequence.items():
-        if states[0] == 0:
-            pixels[remapNote(note)] = (0, 0, 0)
-        else:
-            if states[1] == 0:
-                clear = 1
-            pixels[remapNote(note)] = (255, 0, 0)
-        pixels.show()
-    time.sleep(temp / (10 ** 6))
-    return clear
+        t += 0.1
 
 def waitForButtonPress():
     while not GPIO.input(25):
