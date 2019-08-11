@@ -63,7 +63,7 @@ def writeToPin(sequence, temp,update_rate):
     pixels.show()
     while t < (temp / (10 ** 6)):
         for note, states in sequence.items():
-            if states[0] == 0 or (states == 0 and (t+update_rate) >= (temp / (10 ** 6))):
+            if states[0] == 0 or (states[1] == 0 and (t+update_rate) >= (temp / (10 ** 6))):
                 pixels[remapNote(note)] = (0, 0, 0)
             else:
                 pixels[remapNote(note)] = (255, 0, 0)
