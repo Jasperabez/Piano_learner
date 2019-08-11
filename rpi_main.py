@@ -88,7 +88,7 @@ GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program,
 GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp, bouncetime=200)
 print("middle of adding event detect")
 # TempoDown button event listener
-GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoDown, bouncetime=200)
+GPIO.add_event_detect(pinTD, GPIO.RISING, callback=TempoDown, bouncetime=200)
 # Toggle SS_state a condition in the writePin sequence, use to stop the "main" program
 GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=200)
 print("after adding event detect")
