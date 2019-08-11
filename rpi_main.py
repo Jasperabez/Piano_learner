@@ -22,7 +22,7 @@ notes = []
 noteBeat = list()
 pinTime = list()
 min_beat = 10
-SS_state = True;
+SS_state = True
 print("hihi")
 whiteNoteList = [1, 3, 5, 6, 8, 10, 12]
 blackNoteList = [2, 4, 7, 9, 11]
