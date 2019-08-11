@@ -57,16 +57,19 @@ def roundBeat(input_beat):
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
 
-def writeToPin(sequence, temp):
+def writeToPin(sequence, temp,update_rate):
+    t = 0
     pixels.fill((0,0,0))
     pixels.show()
-    for note,state in sequence.items():
-        if state ==0:
-            pixels[remapNote(note)] = (0, 0, 0)
-        else:
-            pixels[remapNote(note)] = (255, 0, 0)
-        pixels.show()
-    time.sleep(temp / (10 ** 6))
+    while t < (temp / (10 ** 6)):
+        for note, states in sequence.items():
+            if states[0] == 0 or (states[1] == 0 and (t+update_rate) >= (temp / (10 ** 6))):
+                pixels[remapNote(note)] = (0, 0, 0)
+            else:
+                pixels[remapNote(note)] = (255, 0, 0)
+            pixels.show()
+        time.sleep(update_rate)
+        t += update_rate
 
 def waitForButtonPress():
     while not GPIO.input(25):
@@ -91,15 +94,20 @@ for note_meta in noteBeat:
         notes.append(note_meta["note"])
 
 for note_meta in noteBeat:
-    notedict = dict()
-    notedict[note_meta["note"]] = note_meta["state"]
     for i in range(int(note_meta["beat"]/min_beat)):
+        notedict = dict()
+        if not i+1 == int(note_meta["beat"]/min_beat):
+            print("forbidden seq")
+            notedict[note_meta["note"]] = (note_meta["state"], 1)
+        else:
+            notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
+
 
 while True:
     if GPIO.input(25) and switch_state == 0:
         for sequence in pinTime:
-            writeToPin(sequence, Tempo)
+            writeToPin(sequence, Tempo,0.1)
             switch_state = 1
     else:
         switch_state = 0

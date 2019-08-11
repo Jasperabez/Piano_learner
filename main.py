@@ -42,9 +42,12 @@ for note_meta in noteBeat:
         notes.append(note_meta["note"])
 
 for note_meta in noteBeat:
-    notedict = dict()
-    notedict[note_meta["note"]] = note_meta["state"]
     for i in range(int(note_meta["beat"]/min_beat)):
+        notedict = dict()
+        if not i+1 == int(note_meta["beat"]/min_beat):
+            notedict[note_meta["note"]] = (note_meta["state"], 1)
+        else:
+            notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
 
 for sequence in pinTime:
