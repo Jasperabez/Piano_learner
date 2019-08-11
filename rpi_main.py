@@ -159,6 +159,7 @@ for note_meta in noteBeat:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
 
+print("SS_state = "+str(SS_state))
 while SS_state is True:
     for sequence in pinTime:
         writeToPin(sequence, Tempo, 0.1)
