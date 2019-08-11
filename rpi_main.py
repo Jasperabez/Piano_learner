@@ -162,10 +162,14 @@ for note_meta in noteBeat:
         pinTime.append(notedict)
 
 print("SS_state = " + str(SS_state))
-while SS_state is True:
-    for sequence in pinTime:
-        writeToPin(sequence, Tempo, 0.1)
-        if SS_state is False:
-            break
-        print(sequence)
-    SS_state = False
+while True:
+    while SS_state is True:
+        for sequence in pinTime:
+            writeToPin(sequence, Tempo, 0.1)
+            if SS_state is False:
+                break
+            print(sequence)
+        SS_state = False
+    while SS_state is False:
+        pixels.fill((0,100,0))
+        pixels.show()
