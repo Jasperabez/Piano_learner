@@ -6,21 +6,33 @@ import board
 import neopixel
 import RPi.GPIO as GPIO
 
+# pin of pause/resume button
+pinPR = 4
+# pin of start/stop button
+pinSS = 17
+# pin of tempo up button
+pinTU = 27
+# pin of tempo down button
+pinTD = 22
 mid = mido.MidiFile("me.mid")
 Tempo = 0
-black_notes = [61,63,66,68,70]
+TempoOriginal = 0
+black_notes = [61, 63, 66, 68, 70]
 notes = []
 noteBeat = list()
 pinTime = list()
 min_beat = 10
-switch_state = 0;
+SS_state = True;
 print("hihi")
-whiteNoteList = [1,3,5,6,8,10,12]
-blackNoteList = [2,4,7,9,11]
+whiteNoteList = [1, 3, 5, 6, 8, 10, 12]
+blackNoteList = [2, 4, 7, 9, 11]
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-#pin of start/pause/resume button
-GPIO.setup(25,GPIO.IN)
+# Initialize pins as pull_down
+GPIO.setup(pinPR, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pinTU, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pinTD, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(pinSS, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 # Choose an open pin connected to the Data In of the NeoPixel strip, i.e. board.D18
 # NeoPixels must be connected to D10, D12, D18 or D21 to work.
 pixel_pin = board.D18
@@ -38,50 +50,94 @@ ORDER = neopixel.GRB
 pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
                            pixel_order=ORDER)
 
-def remap(OldValue,OldMin,OldMax,NewMin,NewMax):
+
+# wait for PR button to be pressed
+def pause_program(channel):
+    GPIO.remove_event_detect(pinPR)
+    time.sleep(0.2)
+    GPIO.wait_for_edge(pinPR, GPIO.RISING)
+    time.sleep(0.2)
+    GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program, bouncetime=200)
+
+
+# increase Tempo
+def TempoUp(channel):
+    global Tempo
+    global TempoOriginal
+    if Tempo > int(TempoOriginal * (1 / 10)):
+        Tempo -= int(TempoOriginal * (1 / 10))
+
+
+def TempoDown(channel):
+    global Tempo
+    global TempoOriginal
+    if Tempo < int(TempoOriginal * (1 / 10)):
+        Tempo += int(TempoOriginal * (1 / 10))
+
+
+def ToggleSS(channel):
+    global SS_state
+    SS_state = not SS_state
+
+
+# Pause button event listener
+GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program(pinPR),
+                      bouncetime=200)  # Setup event on pin 10 rising edge
+# TempoUp button event listener
+GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp(pinTU), bouncetime=200)
+# TempoDown button event listener
+GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoDown(pinTD), bouncetime=200)
+# Toggle SS_state a condition in the writePin sequence, use to stop the "main" program
+GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS(pinSS), bouncetime=200)
+
+
+def remap(OldValue, OldMin, OldMax, NewMin, NewMax):
     NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
     return NewValue
 
+
 def remapNote(note):
-    note_num = (note%12)+1
+    note_num = (note % 12) + 1
     if note_num in whiteNoteList:
         NewValue = whiteNotePins[whiteNoteList.index(note_num)]
     else:
         NewValue = blackNotePins[blackNoteList.index(note_num)]
     return NewValue
 
+
 def roundBeat(input_beat):
     beat_types = {'1': 1, '2': 2, '4': 4}
     for k in beat_types:
-        beat_types[k] = abs(beat_types[k]-input_beat)
+        beat_types[k] = abs(beat_types[k] - input_beat)
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
 
-def writeToPin(sequence, temp,update_rate):
+
+def writeToPin(sequence, temp, update_rate):
     t = 0
-    pixels.fill((0,0,0))
+    pixels.fill((0, 0, 0))
     pixels.show()
     while t < (temp / (10 ** 6)):
         for note, states in sequence.items():
-            if states[0] == 0 or (states[1] == 0 and (t+update_rate) >= (temp / (10 ** 6))):
+            if states[0] == 0 or (states[1] == 0 and (t + update_rate) >= (temp / (10 ** 6))):
                 pixels[remapNote(note)] = (0, 0, 0)
             else:
                 pixels[remapNote(note)] = (255, 0, 0)
             pixels.show()
+        if SS_state is False:
+            break
         time.sleep(update_rate)
         t += update_rate
 
-def waitForButtonPress():
-    while not GPIO.input(25):
-        pass
 
 for msg in mid:
     if hasattr(msg, 'tempo') and Tempo == 0:
         Tempo = msg.tempo
+        TempoOriginal = msg.tempo
     if hasattr(msg, 'type'):
         if msg.type == "note_on":
-            if msg.time > Tempo/((10**6)*8):
-                beat = msg.time/(Tempo/(10**6))
+            if msg.time > Tempo / ((10 ** 6) * 8):
+                beat = msg.time / (Tempo / (10 ** 6))
                 beat = roundBeat(beat)
                 noteBeat.append({"note": msg.note, "beat": beat, "state": 1})
         elif msg.type == "note_off":
@@ -94,24 +150,19 @@ for note_meta in noteBeat:
         notes.append(note_meta["note"])
 
 for note_meta in noteBeat:
-    for i in range(int(note_meta["beat"]/min_beat)):
+    for i in range(int(note_meta["beat"] / min_beat)):
         notedict = dict()
-        if not i+1 == int(note_meta["beat"]/min_beat):
+        if not i + 1 == int(note_meta["beat"] / min_beat):
             print("forbidden seq")
             notedict[note_meta["note"]] = (note_meta["state"], 1)
         else:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
 
-
-while True:
-    if GPIO.input(25) and switch_state == 0:
-        for sequence in pinTime:
-            writeToPin(sequence, Tempo,0.1)
-            switch_state = 1
-    else:
-        switch_state = 0
-
-
-
-
+while SS_state is True:
+    for sequence in pinTime:
+        writeToPin(sequence, Tempo, 0.1)
+        if SS_state is False:
+            break
+        print(sequence)
+    SS_state = False
