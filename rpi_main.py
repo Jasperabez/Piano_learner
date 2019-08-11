@@ -80,6 +80,7 @@ def ToggleSS(channel):
     SS_state = not SS_state
 
 
+print("before adding event detect")
 # Pause button event listener
 GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program(pinPR),
                       bouncetime=200)  # Setup event on pin 10 rising edge
@@ -159,7 +160,7 @@ for note_meta in noteBeat:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
 
-print("SS_state = "+str(SS_state))
+print("SS_state = " + str(SS_state))
 while SS_state is True:
     for sequence in pinTime:
         writeToPin(sequence, Tempo, 0.1)
