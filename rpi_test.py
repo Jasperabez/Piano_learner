@@ -10,7 +10,6 @@ mid = mido.MidiFile("me.mid")
 Tempo = 0
 black_notes = [61,63,66,68,70]
 notes = []
-clear = 0
 noteBeat = list()
 pinTime = list()
 min_beat = 10
@@ -58,19 +57,19 @@ def roundBeat(input_beat):
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
 
-def writeToPin(sequence, temp,clear):
+def writeToPin(sequence, temp,update_rate):
     t = 0
     pixels.fill((0,0,0))
     pixels.show()
     while t < (temp / (10 ** 6)):
         for note, states in sequence.items():
-            if states[0] == 0 or (states == 0 and (t+0.1) >= (temp / (10 ** 6))):
+            if states[0] == 0 or (states == 0 and (t+update_rate) >= (temp / (10 ** 6))):
                 pixels[remapNote(note)] = (0, 0, 0)
             else:
                 pixels[remapNote(note)] = (255, 0, 0)
             pixels.show()
-        time.sleep(0.1)
-        t += 0.1
+        time.sleep(update_rate)
+        t += update_rate
 
 def waitForButtonPress():
     while not GPIO.input(25):
@@ -107,6 +106,6 @@ for note_meta in noteBeat:
 
 input("startseq")
 for sequence in pinTime:
-  clear = writeToPin(sequence, Tempo,clear)
+  writeToPin(sequence, Tempo,0.1)
   print(sequence)
 print("end of sequence")
