@@ -87,14 +87,14 @@ def ToggleSS(channel):
 print("before adding event detect")
 # Pause button event listener
 GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program,
-                      bouncetime=300)  # Setup event on pin 10 rising edge
+                      bouncetime=350)  # Setup event on pin 10 rising edge
 # TempoUp button event listener
-GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp, bouncetime=200)
+GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp, bouncetime=350)
 print("middle of adding event detect")
 # TempoDown button event listener
-GPIO.add_event_detect(pinTD, GPIO.RISING, callback=TempoDown, bouncetime=200)
+GPIO.add_event_detect(pinTD, GPIO.RISING, callback=TempoDown, bouncetime=350)
 # Toggle SS_state a condition in the writePin sequence, use to stop the "main" program
-GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=300)
+GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=350)
 print("after adding event detect")
 
 def remap(OldValue, OldMin, OldMax, NewMin, NewMax):
