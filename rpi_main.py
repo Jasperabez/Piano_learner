@@ -95,7 +95,7 @@ print("middle of adding event detect")
 # TempoDown button event listener
 GPIO.add_event_detect(pinTD, GPIO.RISING, callback=TempoDown, bouncetime=325)
 # Toggle SS_state a condition in the writePin sequence, use to stop the "main" program
-GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=310)
+GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=300)
 print("after adding event detect")
 
 def remap(OldValue, OldMin, OldMax, NewMin, NewMax):
