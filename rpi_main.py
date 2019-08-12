@@ -14,7 +14,7 @@ pinSS = 17
 pinTU = 27
 # pin of tempo down button
 pinTD = 22
-mid = mido.MidiFile("me.mid")
+mid = mido.MidiFile("/home/pi/piano_learner/me.mid")
 Tempo = 0
 TempoOriginal = 0
 black_notes = [61, 63, 66, 68, 70]
