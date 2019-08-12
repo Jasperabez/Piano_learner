@@ -53,6 +53,7 @@ pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=Fal
 
 # wait for PR button to be pressed
 def pause_program(channel):
+    print("TPR pressed")
     GPIO.remove_event_detect(pinPR)
     time.sleep(0.2)
     GPIO.wait_for_edge(pinPR, GPIO.RISING)
@@ -62,6 +63,7 @@ def pause_program(channel):
 
 # increase Tempo
 def TempoUp(channel):
+    print("TUP pressed")
     global Tempo
     global TempoOriginal
     if Tempo > int(TempoOriginal * (1 / 10)):
@@ -69,6 +71,7 @@ def TempoUp(channel):
 
 
 def TempoDown(channel):
+    print("TUD pressed")
     global Tempo
     global TempoOriginal
     if Tempo < int(TempoOriginal * (1 / 10)):
@@ -76,6 +79,7 @@ def TempoDown(channel):
 
 
 def ToggleSS(channel):
+    print("TSS pressed")
     global SS_state
     SS_state = not SS_state
 
