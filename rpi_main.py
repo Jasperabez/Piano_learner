@@ -23,6 +23,7 @@ noteBeat = list()
 pinTime = list()
 min_beat = 10
 SS_state = False
+PR_state = False
 print("hihi")
 whiteNoteList = [1, 3, 5, 6, 8, 10, 12]
 blackNoteList = [2, 4, 7, 9, 11]
@@ -52,14 +53,10 @@ pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=Fal
 
 
 # wait for PR button to be pressed
-def pause_program(channel):
+def TogglePR(channel):
     print("TPR pressed")
-    GPIO.remove_event_detect(pinPR)
-    time.sleep(0.2)
-    GPIO.wait_for_edge(pinPR, GPIO.RISING)
-    time.sleep(0.2)
-    GPIO.remove_event_detect(pinPR)
-    GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program, bouncetime=200)
+    global PR_state
+    PR_state = not PR_state
 
 
 # increase Tempo
@@ -87,7 +84,7 @@ def ToggleSS(channel):
 
 print("before adding event detect")
 # Pause button event listener
-GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program,
+GPIO.add_event_detect(pinPR, GPIO.RISING, callback=TogglePR,
                       bouncetime=330)  # Setup event on pin 10 rising edge
 # TempoUp button event listener
 GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp, bouncetime=325)
@@ -133,6 +130,8 @@ def writeToPin(sequence, temp, update_rate):
             pixels.show()
         if SS_state is False:
             break
+        while PR_state is True:
+            pass
         time.sleep(update_rate)
         t += update_rate
 
