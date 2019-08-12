@@ -58,6 +58,7 @@ def pause_program(channel):
     time.sleep(0.2)
     GPIO.wait_for_edge(pinPR, GPIO.RISING)
     time.sleep(0.2)
+    GPIO.remove_event_detect(pinPR)
     GPIO.add_event_detect(pinPR, GPIO.RISING, callback=pause_program, bouncetime=200)
 
 
