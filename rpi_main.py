@@ -48,7 +48,7 @@ for value in blackNotePins:
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
 
-pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.2, auto_write=False,
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels+num_pixels_black, brightness=0.2, auto_write=False,
                            pixel_order=ORDER)
 
 
@@ -131,6 +131,8 @@ def writeToPin(sequence, temp, update_rate):
         if SS_state is False:
             break
         while PR_state is True:
+            if SS_state is False:
+                break
             pass
         time.sleep(update_rate)
         t += update_rate
