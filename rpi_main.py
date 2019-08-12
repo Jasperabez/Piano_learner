@@ -177,5 +177,6 @@ while True:
             print(sequence)
         SS_state = False
     while SS_state is False:
+        PR_state = False
         pixels.fill((0,10,0))
         pixels.show()
