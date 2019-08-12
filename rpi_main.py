@@ -64,7 +64,7 @@ def TempoUp(channel):
     print("TUP pressed")
     global Tempo
     global TempoOriginal
-    if Tempo > int(TempoOriginal * (1 / 10)):
+    if Tempo > int(TempoOriginal * (6 / 10)):
         Tempo -= int(TempoOriginal * (1 / 10))
 
 
@@ -72,7 +72,7 @@ def TempoDown(channel):
     print("TUD pressed")
     global Tempo
     global TempoOriginal
-    if Tempo < int(TempoOriginal * (19 / 10)):
+    if Tempo < int(TempoOriginal * (14 / 10)):
         Tempo += int(TempoOriginal * (1 / 10))
 
 
