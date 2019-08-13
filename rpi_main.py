@@ -7,13 +7,13 @@ import neopixel
 import RPi.GPIO as GPIO
 
 # pin of pause/resume button
-pinPR = 4
+pinPR = 22
 # pin of start/stop button
-pinSS = 17
+pinSS = 27
 # pin of tempo up button
-pinTU = 27
+pinTU = 4
 # pin of tempo down button
-pinTD = 22
+pinTD = 17
 mid = mido.MidiFile("/home/pi/piano_learner/me.mid")
 Tempo = 0
 TempoOriginal = 0
