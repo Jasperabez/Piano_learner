@@ -14,17 +14,24 @@ pinSS = 22
 pinTU = 4
 # pin of tempo down button
 pinTD = 17
+# select midi file
 mid = mido.MidiFile("/home/pi/piano_learner/me.mid")
+# variable that holds Tempo read from Midi
 Tempo = 0
+# reference variable to Initial Tempo reading
 TempoOriginal = 0
-black_notes = [61, 63, 66, 68, 70]
+# list of all the notes in midi file
 notes = []
+# list of notes in song
 noteBeat = list()
+# list of notes that get update per lowest beat
 pinTime = list()
 min_beat = 10
+# variable for loops to check whether should terminate
 SS_state = False
+# variable for loops to check whether should infinite loop
 PR_state = False
-print("hihi")
+# reference list to help determine whether note white/black
 whiteNoteList = [1, 3, 5, 6, 8, 10, 12]
 blackNoteList = [2, 4, 7, 9, 11]
 GPIO.setmode(GPIO.BCM)
@@ -48,7 +55,7 @@ for value in blackNotePins:
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
 ORDER = neopixel.GRB
 
-pixels = neopixel.NeoPixel(pixel_pin, num_pixels+num_pixels_black, brightness=0.2, auto_write=False,
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels + num_pixels_black, brightness=0.2, auto_write=False,
                            pixel_order=ORDER)
 
 
@@ -69,7 +76,7 @@ def TempoUp(channel):
 
 
 def TempoDown(channel):
-    print("TUD pressed")
+    print("TDN pressed")
     global Tempo
     global TempoOriginal
     if Tempo < int(TempoOriginal * (14 / 10)):
@@ -82,24 +89,23 @@ def ToggleSS(channel):
     SS_state = not SS_state
 
 
-print("before adding event detect")
+# edit bouncetime to optimize buttons, depends on button quality
 # Pause button event listener
 GPIO.add_event_detect(pinPR, GPIO.RISING, callback=TogglePR,
                       bouncetime=330)  # Setup event on pin 10 rising edge
 # TempoUp button event listener
 GPIO.add_event_detect(pinTU, GPIO.RISING, callback=TempoUp, bouncetime=325)
-print("middle of adding event detect")
 # TempoDown button event listener
 GPIO.add_event_detect(pinTD, GPIO.RISING, callback=TempoDown, bouncetime=325)
 # Toggle SS_state a condition in the writePin sequence, use to stop the "main" program
 GPIO.add_event_detect(pinSS, GPIO.RISING, callback=ToggleSS, bouncetime=330)
-print("after adding event detect")
+
 
 def remap(OldValue, OldMin, OldMax, NewMin, NewMax):
     NewValue = (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
     return NewValue
 
-
+# converts Midi note to Led number
 def remapNote(note):
     note_num = (note % 12) + 1
     if note_num in whiteNoteList:
@@ -108,7 +114,7 @@ def remapNote(note):
         NewValue = blackNotePins[blackNoteList.index(note_num)]
     return NewValue
 
-
+# determine note beat from time played
 def roundBeat(input_beat):
     beat_types = {'1': 1, '2': 2, '4': 4}
     for k in beat_types:
@@ -116,7 +122,7 @@ def roundBeat(input_beat):
     nearest_beat = min(beat_types, key=beat_types.get)
     return float(nearest_beat)
 
-
+# main function to write sequence to LEDs
 def writeToPin(sequence, temp, update_rate):
     t = 0
     pixels.fill((0, 0, 0))
@@ -137,7 +143,7 @@ def writeToPin(sequence, temp, update_rate):
         time.sleep(update_rate)
         t += update_rate
 
-
+# Read data from midi file and save it into noteBeat
 for msg in mid:
     if hasattr(msg, 'tempo') and Tempo == 0:
         Tempo = msg.tempo
@@ -151,22 +157,24 @@ for msg in mid:
         elif msg.type == "note_off":
             noteBeat.append({"note": msg.note, "beat": 0, "state": 0})
 
+# add notes from noteBeat into list notes
 for note_meta in noteBeat:
     if note_meta["beat"] < min_beat:
         min_beat = note_meta["beat"]
     if note_meta["note"] not in notes:
         notes.append(note_meta["note"])
 
+# generate pinTime from noteBeat
 for note_meta in noteBeat:
     for i in range(int(note_meta["beat"] / min_beat)):
         notedict = dict()
         if not i + 1 == int(note_meta["beat"] / min_beat):
-            print("forbidden seq")
             notedict[note_meta["note"]] = (note_meta["state"], 1)
         else:
             notedict[note_meta["note"]] = (note_meta["state"], 0)
         pinTime.append(notedict)
 
+# main loop
 print("SS_state = " + str(SS_state))
 while True:
     while SS_state is True:
@@ -178,5 +186,5 @@ while True:
         SS_state = False
     while SS_state is False:
         PR_state = False
-        pixels.fill((0,10,0))
+        pixels.fill((0, 10, 0))
         pixels.show()
