@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo apt install python3 python3-pip
 sudo pip3 install mido rpi_ws281x adafruit-circuitpython-neopixel
 echo "[Unit]
 Description=My Script Service
