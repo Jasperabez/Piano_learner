@@ -21,6 +21,6 @@ The main python program is called "rpi_main.py" you can run it for a test, or ru
 \
 do take note that to change "pi" in both pianoscript.sh and setup.sh if that is not your username
 # Pictures
-![front](./Pictures/front.png)
-![back](./Pictures/back.png)
-![top](./Pictures/top.png)
+![front](./Pictures/front.jpeg)
+![back](./Pictures/back.jpeg)
+![top](./Pictures/top.jpeg)
