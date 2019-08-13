@@ -7,9 +7,9 @@ import neopixel
 import RPi.GPIO as GPIO
 
 # pin of pause/resume button
-pinPR = 22
+pinPR = 27
 # pin of start/stop button
-pinSS = 27
+pinSS = 22
 # pin of tempo up button
 pinTU = 4
 # pin of tempo down button
