@@ -7,4 +7,4 @@
 # Default-Stop:
 # Short-Description: Execute piano_learner python script ...
 ### END INIT INFO
-sudo python3 /home/$USER/piano_learner/rpi_main.py
+sudo python3 /home/pi/piano_learner/rpi_main.py

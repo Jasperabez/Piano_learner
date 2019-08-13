@@ -6,11 +6,11 @@ After=multi-user.target
 
 [Service]
 Type=idle
-ExecStart=/home/$USER/piano_learner/pianoscript.sh
+ExecStart=/home/pi/piano_learner/pianoscript.sh
 
 [Install]
 WantedBy=multi-user.target" >> /lib/systemd/system/piano_learner.service
-sudo chmod +x /home/$USER/piano_learner/pianoscript.sh
+sudo chmod +x /home/pi/piano_learner/pianoscript.sh
 sudo chmod 644 /lib/systemd/system/piano_learner.service
 sudo systemctl daemon-reload
 sudo systemctl enable piano_learner.service
