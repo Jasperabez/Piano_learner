@@ -1,5 +1,6 @@
 # Introduction
 A simple python program that takes in a midi file and lights up corresponding a WS2812b Led strip
+<br />
 For more information regarding the intention of this project please refer to the [ppt](./Presentation.ppt)
 # The Team
 This project is a joint effort of the following three:
@@ -26,9 +27,8 @@ The Schematic is as below
 Hook up the connection as per schematic, the physical assembly can be up to personal preference but in this scenario the Raspberry pi and the buttons would be attached on the bracket using mounting tape. Refer to pictures if in doubt.
 
 # The Code
-The main python program is called "rpi_main.py" you can run it for a test, or run the setup script called "setup.sh" as root which would install all the necessary dependencies and run the python program on system start-up.
-
-do take note that to change "pi" in both pianoscript.sh and setup.sh if that is not your username
+The main python program is called "rpi_main.py" you can run it for a test, or run the setup script called "setup.sh" as root which would install all the necessary dependencies and run the python program on system start-up.<br />
+Do take note that to change "pi" in both pianoscript.sh and setup.sh if that is not your username
 # Pictures
 ![front](./Pictures/front.jpeg)
 ![back](./Pictures/back.jpeg)
