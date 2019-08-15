@@ -1,4 +1,4 @@
-# Piano_learner
+# Introduction
 A simple python program that takes in a midi file and lights up corresponding a WS2812b Led strip\
 for more information regarding the intention of this project please refer to the [ppt](./Presentation.ppt)
 # The Team
@@ -6,6 +6,7 @@ This project is a joint effort of the following three:
 1. Jabez Tho Ngee Qi (1802315) Singapore Polytechnic
 2. Nashita Fatima (1822632) Singapore Polytechnic
 3. Yeo Ying Shen Reynard (1805152) Singapore Polytechnic
+
 # Product demo
 A brief showcase of the LED lit up sequence can be found on [this](https://youtu.be/y9tXRVWJuIY) youtube video, playing to the tune of mary have a little lamb(Do take not that one key is missing from the strip, hence the gap). The video would be updated to show the fully assembled product.
 # Replicating Circuit Board
