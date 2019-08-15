@@ -21,9 +21,10 @@ To replicate the Pianolearner, the following components are required
 6. 8x female to female jumper wires
 7. Mounting Tape
 
-The Schematic is as below<br />
+The Schematic is as below
+
 ![schematic](./Pictures/schematic.png)
-<br />
+
 Hook up the connection as per schematic, the physical assembly can be up to personal preference but in this scenario the Raspberry pi and the buttons would be attached on the bracket using mounting tape. Refer to pictures if in doubt.
 
 # The Code
