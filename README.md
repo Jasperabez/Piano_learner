@@ -1,7 +1,7 @@
 # Introduction
 A simple python program that takes in a midi file and lights up corresponding a WS2812b Led strip
 <br /><br />
-For more information regarding the intention of this project please refer to the [ppt](./Presentation.ppt)
+For more information regarding the intention of this project please refer to the [slides](./Presentation.pdf)
 # The Team
 This project is a joint effort of the following three:
 1. Jabez Tho Ngee Qi (1802315) Singapore Polytechnic
